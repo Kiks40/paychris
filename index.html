@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Envoyer de l’argent à [Ton prénom]</title>
+  <title>Envoyer de l’argent à Christophe</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     function toggleRIB() {
@@ -14,19 +14,19 @@
       btn.innerText = isHidden ? "Masquer le RIB" : "Afficher le RIB";
     }
 
-    function copyRIB() {
-      const rib = document.getElementById("rib-number").innerText;
-      navigator.clipboard.writeText(rib).then(() => {
-        const btn = document.getElementById("copy-btn");
+    function copyText(elementId, buttonId) {
+      const text = document.getElementById(elementId).innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById(buttonId);
         btn.innerText = "Copié ✅";
-        setTimeout(() => btn.innerText = "Copier le RIB", 2000);
+        setTimeout(() => btn.innerText = "Copier", 2000);
       });
     }
 
     function openPayPal() {
       const amountInput = document.getElementById("amount");
       const amount = parseFloat(amountInput.value.replace(",", "."));
-      const basePaypal = "https://paypal.me/tonpseudo"; // 🔧 à remplacer par ton lien réel
+      const basePaypal = "https://paypal.me/clabat"; // lien PayPal
 
       const link = (!isNaN(amount) && amount > 0)
         ? `${basePaypal}/${amount.toString().replace(",", ".")}`
@@ -63,7 +63,7 @@
 <body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4">
   <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-sm text-center">
     <h1 class="text-2xl font-semibold mb-4 text-gray-800">
-      Envoyer de l’argent à <span class="text-blue-600">[Ton prénom]</span>
+      Envoyer de l’argent à <span class="text-blue-600">Christophe</span>
     </h1>
 
     <!-- Champ Montant -->
@@ -84,20 +84,22 @@
         </button>
       </div>
       <div id="rib-container" class="hidden mt-3">
-        <p id="rib-number" class="text-sm text-gray-700 break-all select-all">
-          FR76 1234 5678 9012 3456 7890 123
-        </p>
-        <button id="copy-btn" onclick="copyRIB()" 
-                class="mt-2 bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
-          Copier le RIB
-        </button>
+        <div class="flex justify-between items-center gap-2">
+          <p id="rib-number" class="text-sm text-gray-700 break-all select-all">
+            FR76 1234 5678 9012 3456 7890 123
+          </p>
+          <button id="copy-btn-rib" onclick="copyText('rib-number', 'copy-btn-rib')" 
+                  class="bg-blue-500 text-white text-xs px-2 py-1 rounded-lg hover:bg-blue-600 transition shrink-0">
+            Copier
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Section PayPal -->
     <div class="border p-3 rounded-lg mb-4 text-left">
       <div class="flex justify-between items-center">
-        <p class="font-medium">💰 PayPal <span class="amount-display text-gray-500 text-sm"></span></p>
+        <p class="font-medium">💰 PayPal </span></p>
         <button onclick="openPayPal()" 
                 class="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
           Lien
@@ -107,10 +109,13 @@
 
     <!-- Section Applications (Lydia + Wero regroupés) -->
     <div class="border p-3 rounded-lg text-left">
-      <p class="font-medium">📱 Applications <span class="amount-display text-gray-500 text-sm"></span></p>
-      <div class="mt-2 space-y-1 text-gray-700 text-sm">
-        <p><strong>Lydia :</strong> +33 6 12 34 56 78</p>
-        <p><strong>Wero :</strong> +33 6 12 34 56 78</p>
+      <p class="font-medium">📱 Lydia et Wero </span></p>
+      <div class="mt-2 text-gray-700 text-sm flex justify-between items-center gap-2">
+        <p id="phone-number"><strong>Num :</strong> +33 6 12 34 56 78</p>
+        <button id="copy-btn-phone" onclick="copyText('phone-number', 'copy-btn-phone')" 
+                class="bg-blue-500 text-white text-xs px-2 py-1 rounded-lg hover:bg-blue-600 transition shrink-0">
+          Copier
+        </button>
       </div>
     </div>
 
