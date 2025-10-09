@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Envoyer de l’argent à [Ton prénom]</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function toggleRIB() {
+      const ribContainer = document.getElementById("rib-container");
+      const btn = document.getElementById("toggle-rib-btn");
+      const isHidden = ribContainer.classList.contains("hidden");
+      ribContainer.classList.toggle("hidden");
+      btn.innerText = isHidden ? "Masquer le RIB" : "Afficher le RIB";
+    }
+
+    function copyRIB() {
+      const rib = document.getElementById("rib-number").innerText;
+      navigator.clipboard.writeText(rib).then(() => {
+        const btn = document.getElementById("copy-btn");
+        btn.innerText = "Copié ✅";
+        setTimeout(() => btn.innerText = "Copier le RIB", 2000);
+      });
+    }
+
+    function openPayPal() {
+      const amountInput = document.getElementById("amount");
+      const amount = parseFloat(amountInput.value.replace(",", "."));
+      const basePaypal = "https://paypal.me/tonpseudo"; // 🔧 à remplacer par ton lien réel
+
+      const link = (!isNaN(amount) && amount > 0)
+        ? `${basePaypal}/${amount.toString().replace(",", ".")}`
+        : basePaypal;
+
+      window.open(link, "_blank");
+    }
+
+    function updateAmounts() {
+      const amountInput = document.getElementById("amount");
+      const amount = parseFloat(amountInput.value.replace(",", "."));
+      const displays = document.querySelectorAll(".amount-display");
+
+      if (!isNaN(amount) && amount > 0) {
+        const formatted = amount.toString().replace(",", ".");
+        displays.forEach(el => el.innerText = `(${formatted} €)`);
+      } else {
+        displays.forEach(el => el.innerText = "");
+      }
+    }
+
+    function initFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const montant = params.get("montant");
+      if (montant) {
+        document.getElementById("amount").value = montant;
+        updateAmounts();
+      }
+    }
+
+    window.onload = initFromURL;
+  </script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4">
+  <div class="bg-white shadow-lg rounded-2xl p-6 w-full max-w-sm text-center">
+    <h1 class="text-2xl font-semibold mb-4 text-gray-800">
+      Envoyer de l’argent à <span class="text-blue-600">[Ton prénom]</span>
+    </h1>
+
+    <!-- Champ Montant -->
+    <div class="mb-6">
+      <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Montant à envoyer (€)</label>
+      <input id="amount" type="number" min="0" step="0.01" placeholder="Ex: 25"
+             class="w-full border rounded-lg px-3 py-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-400"
+             oninput="updateAmounts()">
+    </div>
+
+    <!-- Section RIB -->
+    <div class="border p-3 rounded-lg mb-4 text-left">
+      <div class="flex justify-between items-center">
+        <p class="font-medium">💳 RIB</p>
+        <button id="toggle-rib-btn" onclick="toggleRIB()" 
+                class="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-lg hover:bg-gray-300 transition">
+          Afficher le RIB
+        </button>
+      </div>
+      <div id="rib-container" class="hidden mt-3">
+        <p id="rib-number" class="text-sm text-gray-700 break-all select-all">
+          FR76 1234 5678 9012 3456 7890 123
+        </p>
+        <button id="copy-btn" onclick="copyRIB()" 
+                class="mt-2 bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
+          Copier le RIB
+        </button>
+      </div>
+    </div>
+
+    <!-- Section PayPal -->
+    <div class="border p-3 rounded-lg mb-4 text-left">
+      <div class="flex justify-between items-center">
+        <p class="font-medium">💰 PayPal <span class="amount-display text-gray-500 text-sm"></span></p>
+        <button onclick="openPayPal()" 
+                class="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
+          Lien
+        </button>
+      </div>
+    </div>
+
+    <!-- Section Applications (Lydia + Wero regroupés) -->
+    <div class="border p-3 rounded-lg text-left">
+      <p class="font-medium">📱 Applications <span class="amount-display text-gray-500 text-sm"></span></p>
+      <div class="mt-2 space-y-1 text-gray-700 text-sm">
+        <p><strong>Lydia :</strong> +33 6 12 34 56 78</p>
+        <p><strong>Wero :</strong> +33 6 12 34 56 78</p>
+      </div>
+    </div>
+
+    <p class="mt-6 text-xs text-gray-400">Merci ❤️</p>
+  </div>
+</body>
+</html>
