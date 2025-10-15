@@ -1,2 +1,2 @@
 # paychris
-Page perso qui regroupe les différentes solution pour m'envoyer de l'argent
+Page perso qui regroupe les différentes solutions pour m'envoyer de l'argent
