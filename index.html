@@ -49,8 +49,24 @@
     }
 
     function initFromURL() {
+      let montant = null;
+    
+      // 1️⃣ - Vérifie d'abord s'il y a un paramètre classique (pour compatibilité)
       const params = new URLSearchParams(window.location.search);
-      const montant = params.get("montant");
+      if (params.has("montant")) {
+        montant = params.get("montant");
+      }
+    
+      // 2️⃣ - Si aucun paramètre, essaye de lire le dernier segment de l’URL
+      if (!montant) {
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const lastPart = pathParts[pathParts.length - 1];
+        if (!isNaN(parseFloat(lastPart))) {
+          montant = lastPart;
+        }
+      }
+    
+      // 3️⃣ - Si on a trouvé un montant valide, on l'affiche dans le champ
       if (montant) {
         document.getElementById("amount").value = montant;
         updateAmounts();
@@ -123,4 +139,5 @@
   </div>
 </body>
 </html>
+
 
