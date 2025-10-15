@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirection...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      // Récupère le chemin complet après ton dossier "pay"
+      const path = window.location.pathname.split("/").filter(Boolean);
+
+      // Trouve la partie finale (après /pay/)
+      const lastPart = path[path.length - 1];
+
+      // Base de ton site principal (⚠️ adapte ce chemin selon ton dépôt GitHub Pages)
+      const baseURL = "https://kiks40.github.io/paychris";
+
+      // Si la dernière partie du chemin est un nombre (ex: /12.5)
+      if (!isNaN(parseFloat(lastPart))) {
+        // Redirige vers le site principal avec le paramètre ?montant=
+        window.location.replace(`${baseURL}?montant=${lastPart}`);
+      } else {
+        // Sinon redirige simplement vers la page principale
+        window.location.replace(baseURL);
+      }
+    })();
+  </script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <p>Redirection en cours...</p>
+</body>
+</html>
